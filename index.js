@@ -26,7 +26,7 @@ fastify.post('/transliterate', (req, reply) => {
     reply.send({
       success: false,
       message: e.message,
-    })
+    });
   }
 });
 
@@ -36,4 +36,4 @@ fastify.listen(process.env.PORT || 3000, (err, address) => {
     process.exit(1);
   }
   fastify.log.info(`server listening on ${address}`);
-})
+});
