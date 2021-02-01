@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ICU Rule-Based Transliterator Tester</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 10px;
+    }
+
+    h2 {
+      margin-block-start: 5px;
+    }
+
+    h4 {
+      margin-block-end: 8px;
+    }
+
+    textarea {
+      padding: 10px;
+    }
+
+    #rules, #input, #output {
+      width: 95%;
+    }
+
+    #rules {
+      font-family: monospace;
+    }
+
+    #input {
+      font-family: sans-serif;
+    }
+
+    #form {
+      margin-block-start: 20px;
+    }
+
+    #form button, #form input, #form label {
+      cursor: pointer;
+      vertical-align: middle;
+    }
+    #form button {
+      margin-inline-end: 10px;
+    }
+
+    #output {
+      white-space: pre;
+      padding: 10px;
+    }
+
+    .error {
+      background-color: #ffcccb;
+    }
+  </style>
+</head>
+<body>
+  <h2>ICU Rule-Based Transliterator Tester</h1>
+
+  <h4>Rules:</h4>
+  <textarea id="rules" rows="10"></textarea>
+
+  <h4>Input text:</h4>
+  <textarea id="input" rows="3"></textarea>
+
+  <div id="form">
+    <button id="submit">Transliterate</button>
+    <input type="checkbox" id="reverse"><label for="reverse">Reverse</label>
+  </div>
+
+  <h4>Output:</h4>
+  <div id="output"></div>
+
+  <script>
+    document.getElementById('submit').addEventListener('click', e => {
+      const rules = document.getElementById('rules').value;
+      const input = document.getElementById('input').value;
+      const forward = document.getElementById('reverse').checked ? 0 : 1;
+
+      fetch('/transliterate', {
+        method: 'POST',
+        body: new URLSearchParams({ rules: rules, input: input, forward: forward })
+      })
+      .then(res => res.json())
+      .then(res => {
+        const output = document.getElementById('output');
+        output.textContent = res.message;
+        output.className = res.success ? null : 'error';
+      });
+    });
+  </script>
+</body>
+</html>
